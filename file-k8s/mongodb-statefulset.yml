@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+  namespace: m-ecommerce
+spec:
+  serviceName: mongodb
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:latest
+          command: ["mongod"]
+          args: ["--bind_ip_all", "--noauth"]
+          ports:
+            - containerPort: 27017
+          livenessProbe:
+            exec:
+              command:
+                - echo
+                - -e
+                - '--eval "db.adminCommand(''ping'')"'
+                - \|
+                - xargs
+                - mongo
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            exec:
+              command:
+                - echo
+                - -e
+                - '--eval "db.adminCommand(''ping'')"'
+                - \|
+                - xargs
+                - mongo
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: mongo-data
+              mountPath: /data/db
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+  namespace: m-ecommerce
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+  

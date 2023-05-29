@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-service
+  namespace: m-ecommerce
+  labels:
+    app: gateway-service
+spec:
+  selector:
+    app: gateway-deployment
+  ports:
+    - protocol: TCP
+      port: 5005
+      targetPort: 5005

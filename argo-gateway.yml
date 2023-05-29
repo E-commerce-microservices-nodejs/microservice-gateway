@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-gateway
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://gitlab.com/Asmae20/gateway-microservice.git
+    targetRevision: HEAD
+    path: file-k8s
+    
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gateway-local
+
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+  
+
+    automated:
+      selfHeal: true
+      prune: true
