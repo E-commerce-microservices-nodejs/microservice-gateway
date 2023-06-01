@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
         - name: gateway-deployment
-          image: asmaeel/gateway-microservice:1.3
+          image: asmaeel/gateway-microservice:1.4
           ports:
             - containerPort: 5005
               name: gateway-port
