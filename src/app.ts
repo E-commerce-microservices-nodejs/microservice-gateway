@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import mongoose, { ConnectOptions } from "mongoose";
 import gatewayRouter from "./routes/api/gatewayRoutes";
 import UserModel from "./models/UserModel";
+import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
@@ -37,13 +38,24 @@ mongoose
   .then(() => {
 
     console.log("Connected to database");
+    const token = jwt.sign(
+      {  email: 'riad@gmail.com',
+      password: "1234",
+      role:'customer',
+      credit:9000},
+      `${process.env.TOKEN_KEY}`,
+      {
+        expiresIn: "2h",
+      }
+    );
     const defaultCustomer={
       email: 'riad@gmail.com',
       password: "1234",
-      token:null,
+      token:token,
       role:'customer',
       credit:9000
     }
+    
     UserModel.insertMany(defaultCustomer)
       .then(() => {
         console.log("Initial Products data inserted");
