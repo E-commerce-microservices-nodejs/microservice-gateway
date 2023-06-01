@@ -75,7 +75,7 @@ router.get('/orders/:orderId', async (req: Request, res: Response) => {
 
 // Request payment for the order
 router.post('/orders/:orderId/payment', async (req: Request, res: Response) => {
-  const { orderId } = req.params;
+  //  const { orderId } = req.params;
   try {
     const response = await axios.post(`${paymentServiceUrl}/payment`, req.body);
     res.json(response.data);
@@ -85,25 +85,25 @@ router.post('/orders/:orderId/payment', async (req: Request, res: Response) => {
 });
 
 // Request marking the order as paid
-router.post('/orders/:orderId/mark-paid', async (req: Request, res: Response) => {
-  const { orderId } = req.params;
-  try {
-    const response = await axios.post(`${ordersServiceUrl}/orders/${orderId}/mark-paid`);
-    res.json(response.data);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to mark the order as paid' });
-  }
-});
+// router.post('/orders/:orderId/mark-paid', async (req: Request, res: Response) => {
+//   const { orderId } = req.params;
+//   try {
+//     const response = await axios.post(`${ordersServiceUrl}/orders/${orderId}/mark-paid`);
+//     res.json(response.data);
+//   } catch (error) {
+//     res.status(500).json({ error: 'Failed to mark the order as paid' });
+//   }
+// });
 
-// Confirm payment
-router.post('/payment/confirm', async (req: Request, res: Response) => {
-  try {
-    const response = await axios.post(`${paymentServiceUrl}/payment/confirm`, req.body);
-    res.json(response.data);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to confirm payment' });
-  }
-});
+// // Confirm payment
+// router.post('/payment/confirm', async (req: Request, res: Response) => {
+//   try {
+//     const response = await axios.post(`${paymentServiceUrl}/payment/confirm`, req.body);
+//     res.json(response.data);
+//   } catch (error) {
+//     res.status(500).json({ error: 'Failed to confirm payment' });
+//   }
+// });
 
 
 // authentication
@@ -164,7 +164,6 @@ router.post("/register", async (req, res) => {
 // login------------
 
 router.post("/login", async (req, res) => {
-console.log("Hello 1")
   // Our login logic starts here
   try {
     // Get user input
