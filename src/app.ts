@@ -7,7 +7,11 @@ import mongoose, { ConnectOptions } from "mongoose";
 import gatewayRouter from "./routes/api/gatewayRoutes";
 import UserModel from "./models/UserModel";
 import jwt from 'jsonwebtoken';
+<<<<<<< HEAD
 
+=======
+import bcrypt from 'bcrypt'
+>>>>>>> 779c85c32a914d1f534cc7272929745e35a3bf15
 dotenv.config();
 
 const app = express();
@@ -29,12 +33,13 @@ app.use("/api", gatewayRouter);
 
 mongoose
   .connect(
-    process.env.MONGO_URI as string,
+    `${process.env.MONGO_URI}`||'mongodb://mongodb-service/microservices',
     {
       useNewUrlParser: true,
       useUnifiedTopology: true
     } as ConnectOptions
   )
+<<<<<<< HEAD
   .then(() => {
 
     console.log("Connected to database");
@@ -43,14 +48,32 @@ mongoose
       password: "1234",
       role:'customer',
       credit:9000},
+=======
+  .then(async() => {
+
+    console.log("Connected to database");
+    const encryptedPassword = await bcrypt.hash('1234', 10);
+
+    const token = jwt.sign(
+      {  email: 'elhajjaji@gmail.com',
+      password: "1234",
+      role:'customer',
+      credit:9000
+    },
+>>>>>>> 779c85c32a914d1f534cc7272929745e35a3bf15
       `${process.env.TOKEN_KEY}`,
       {
         expiresIn: "2h",
       }
     );
     const defaultCustomer={
+<<<<<<< HEAD
       email: 'riad@gmail.com',
       password: "1234",
+=======
+      email: 'elhajjaji@gmail.com',
+      password: encryptedPassword,
+>>>>>>> 779c85c32a914d1f534cc7272929745e35a3bf15
       token:token,
       role:'customer',
       credit:9000

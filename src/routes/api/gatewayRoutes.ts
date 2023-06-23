@@ -26,7 +26,11 @@ router.use((req: Request, res: Response, next) => {
 router.get('/products', async (req: Request, res: Response) => {
   try {
     const response = await axios.get(`${productsServiceUrl}/products`);
+<<<<<<< HEAD
     console.log(req)
+=======
+    console.log(req.url)
+>>>>>>> 779c85c32a914d1f534cc7272929745e35a3bf15
     res.json(response.data);
   } catch (error) {
     res.status(500).json({ error: 'Failed to retrieve products' });
@@ -38,7 +42,7 @@ router.get('/products/:productId', async (req: Request, res: Response) => {
   const { productId } = req.params;
   try {
     const response = await axios.get(`${productsServiceUrl}/products/${productId}`);
-    res.json(response.data);
+    res.status(200).json(response.data);
   } catch (error) {
     res.status(500).json({ error: 'Failed to retrieve product information' });
   }
@@ -47,18 +51,25 @@ router.get('/products/:productId', async (req: Request, res: Response) => {
 router.get('/orders', async (req: Request, res: Response) => {
     try {
       const response = await axios.get(`${ordersServiceUrl}/orders`);
-      res.json(response.data);
+      res.status(200).json(response.data);
     } catch (error) {
       res.status(500).json({ error: 'Failed to retrieve orders' });
+     
+
     }
   });
 // Place an order
 router.post('/orders', async (req: Request, res: Response) => {
   try {
+        console.log('I am in gateway To orders ....')
+
     const response = await axios.post(`${ordersServiceUrl}/orders`, req.body);
     res.json(response.data);
+
   } catch (error) {
     res.status(500).json({ error: 'Failed to place order' });
+    console.log('I am in gateway To orders but failed ....')
+
   }
 });
 
@@ -74,10 +85,17 @@ router.get('/orders/:orderId', async (req: Request, res: Response) => {
 });
 
 // Request payment for the order
+<<<<<<< HEAD
 router.post('/orders/:orderId/payment', async (req: Request, res: Response) => {
   //  const { orderId } = req.params;
+=======
+router.post('/orders/payment', async (req: Request, res: Response) => {
+  
+>>>>>>> 779c85c32a914d1f534cc7272929745e35a3bf15
   try {
-    const response = await axios.post(`${paymentServiceUrl}/payment`, req.body);
+    console.log(req.body)
+    const response = await axios.post(`${paymentServiceUrl}/payment`,req.body);
+
     res.json(response.data);
   } catch (error) {
     res.status(500).json({ error: 'Failed to request payment for the order' }).end();
@@ -164,6 +182,7 @@ router.post("/register", async (req, res) => {
 // login------------
 
 router.post("/login", async (req, res) => {
+<<<<<<< HEAD
   // Our login logic starts here
   try {
     // Get user input
@@ -195,9 +214,47 @@ router.post("/login", async (req, res) => {
     res.status(400).send("Invalid Credentials");
   } catch (err) {
     console.log(err);
+=======
+  console.log("Login trigered....")
+  try {
+    const { email, password } = req.body;
+
+    if (!(email && password)) {
+      return res.status(400).send("All input is required");
+    }
+
+    const user = await UserModel.findOne({ email });
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      console.log("Signing processing....")
+
+      const token = jwt.sign({ email, password }, `${process.env.TOKEN_KEY}`, {
+        expiresIn: "2h",
+      });
+      console.log("Signing finished....")
+
+
+      user.token = token;
+      console.log("login finished....")
+
+      return res.status(200).json(user);
+    }
+    console.log("Invalid Credentials....")
+
+    return res.status(400).send("Invalid Credentials");
+  } catch (err) {
+        console.log("Internal server error....")
+
+    console.log(err);
+
+    return res.status(500).send("Internal Server Error");
+>>>>>>> 779c85c32a914d1f534cc7272929745e35a3bf15
   }
 });
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 779c85c32a914d1f534cc7272929745e35a3bf15
 export =router
